@@ -1,5 +1,8 @@
 # Mastering Diverse Domains through World Models
 
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
+
 A reimplementation of [DreamerV3][paper], a scalable and general reinforcement
 learning algorithm that masters a wide range of applications with fixed
 hyperparameters.
@@ -50,22 +53,36 @@ increases data efficiency.
 
 # Instructions
 
-The code has been tested on Linux and Mac and requires Python 3.11+.
+The code has been tested on Linux and Mac and requires Python 3.10+.
 
-## Docker
+## Installation
 
-You can either use the provided `Dockerfile` that contains instructions or
-follow the manual instructions below.
+### Option 1: Using UV (Recommended)
 
-## Manual
+```sh
+# Install from GitHub
+uv add git+https://github.com/danijar/dreamerv3
 
-Install [JAX][jax] and then the other dependencies:
+# Or install locally
+git clone https://github.com/danijar/dreamerv3
+cd dreamerv3
+uv sync
+
+# For CUDA support (Linux/Windows only)
+uv sync --extra cuda12
+```
+
+### Option 2: Using pip
 
 ```sh
 pip install -U -r requirements.txt
 ```
 
-Training script:
+### Option 3: Docker
+
+You can use the provided `Dockerfile` that contains all instructions.
+
+## Training
 
 ```sh
 python dreamerv3/main.py \
@@ -77,14 +94,35 @@ python dreamerv3/main.py \
 To reproduce results, train on the desired task using the corresponding config,
 such as `--configs atari --task atari_pong`.
 
-View results:
+## Inference and Visualization
+
+### View Training Results
 
 ```sh
 pip install -U scope
 python -m scope.viewer --basedir ~/logdir --port 8000
 ```
 
-Scalar metrics are also writting as JSONL files.
+Scalar metrics are also written as JSONL files.
+
+### Run Inference with Video Recording
+
+```sh
+# Install video dependencies
+uv add imageio imageio-ffmpeg
+
+# Run inference and record videos
+python inference_video.py \
+  --checkpoint ~/logdir/dreamer_pong/checkpoint.pkl \
+  --task atari_pong \
+  --episodes 5 \
+  --output ./videos/
+
+# View generated videos
+open ./videos/episode_000_score_21.0.mp4
+```
+
+See [INFERENCE_GUIDE.md](INFERENCE_GUIDE.md) for detailed visualization options.
 
 # Tips
 
