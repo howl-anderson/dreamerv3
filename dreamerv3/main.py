@@ -1,19 +1,15 @@
 import importlib
 import os
 import pathlib
-import sys
 from functools import partial as bind
-
-folder = pathlib.Path(__file__).parent
-sys.path.insert(0, str(folder.parent))
-sys.path.insert(1, str(folder.parent.parent))
-__package__ = folder.name
 
 import elements
 import embodied
 import numpy as np
 import portal
 import ruamel.yaml as yaml
+
+folder = pathlib.Path(__file__).parent
 
 
 def main(argv=None):
